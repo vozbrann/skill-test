@@ -51,7 +51,15 @@ const testList = [
 ];
 
 const Catalog = () => {
-  const [searchInput, setSearchInput] = useState(0);
+  const [searchInput, setSearchInput] = useState("");
+
+  const handleSearchInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const filteredTestList = testList.filter(test => {
+    return test.title.toLowerCase().includes(searchInput.toLowerCase())
+  });
 
   return (
     <div>
@@ -67,11 +75,13 @@ const Catalog = () => {
           <FormControl
             className="border-secondary"
             placeholder="Test title..."
+            value={searchInput}
+            onChange={handleSearchInputChange}
           />
         </InputGroup>
 
         <Row className="mb-4">
-          {testList.map(testInfo => (
+          {filteredTestList.map(testInfo => (
             <Col key={testInfo.id} md={6} lg={4} className="mb-4">
               <TestCard testInfo={testInfo}/>
             </Col>
