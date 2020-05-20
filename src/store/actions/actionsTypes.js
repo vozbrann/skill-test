@@ -1,0 +1,5 @@
+export const AUTH_USER = 'AUTH_USER';
+export const LOGIN_LOADING = 'LOGIN_LOADING';
+export const SIGN_UP_LOADING = 'SIGN_UP_LOADING';
+export const USER_INFO_LOADING = 'USER_INFO_LOADING';
+export const USER_INFO_ERROR = 'USER_INFO_ERROR';
