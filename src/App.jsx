@@ -15,29 +15,7 @@ import {getUserInfo} from './store/actions/userActions';
 import {useDispatch, useSelector} from 'react-redux';
 import Catalog from './components/catalog/Catalog';
 import Profile from './components/profile/Profile';
-
-function GusetLinks() {
-  return (
-    <Switch>
-      <Route exact path="/" component={Main}/>
-      <Route exact path="/catalog" component={Catalog}/>
-      <Route exact path="/signUp" component={SignUp}/>
-      <Route exact path="/login" component={Login}/>
-      <Route path="*" render={() => <Redirect to="/"/>}/>
-    </Switch>
-  )
-}
-
-function UserLinks() {
-  return (
-    <Switch>
-      <Route exact path="/" component={Main}/>
-      <Route exact path="/catalog" component={Catalog}/>
-      <Route exact path="/profile" component={Profile}/>
-      <Route path="*" render={() => <Redirect to="/"/>}/>
-    </Switch>
-  )
-}
+import TestDetails from './components/testDetails/TestDetails';
 
 function App() {
   const dispatch = useDispatch();
@@ -51,7 +29,15 @@ function App() {
     <Router>
       <div className="App">
         <AppBar/>
-        {user || userInfoLoading ? <UserLinks/> : <GusetLinks/>}
+        <Switch>
+          <Route exact path="/" component={Main}/>
+          <Route exact path="/catalog" component={Catalog}/>
+          <Route exact path="/catalog/:id" component={TestDetails}/>
+          {(user || userInfoLoading) && <Route exact path="/profile" component={Profile}/>}
+          ((!user || userInfoLoading) && <Route exact path="/signUp" component={SignUp}/>}
+          {(!user || userInfoLoading) && <Route exact path="/login" component={Login}/>}
+          <Route path="*" render={() => <Redirect to="/"/>}/>
+        </Switch>
       </div>
     </Router>
   );
