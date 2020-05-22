@@ -1,9 +1,4 @@
 import React from 'react';
-import welcomeImage from '../../img/undraw_welcoming_xvuq.svg';
-import Container from 'react-bootstrap/Container';
-import Image from 'react-bootstrap/Image';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
@@ -14,15 +9,8 @@ import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux'
 import { loginUser } from '../../store/actions/userActions'
 
-import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import AuthContainer from './AuthContainer';
-const MyContainer = styled.div`
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
 const validationSchema = Yup.object().shape({
   email: Yup

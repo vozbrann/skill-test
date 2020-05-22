@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import certificationImage from '../../img/undraw_certification_aif8.svg';
 import graduationImage from '../../img/undraw_Graduation_ktn0.svg';
@@ -11,8 +11,15 @@ import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 
 import styled from 'styled-components';
-import StyledTestCardSmall from '../StyledTestCardSmall'
 import {Link} from 'react-router-dom';
+import StyledLink from '../StyledLink';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchTestInfoList} from '../../store/actions/testInfoActions';
+import {LineClamp} from '../LineClamp';
+import Time from '../Time';
+import SmallTestCard from '../SmallTestCard';
+import Spinner from 'react-bootstrap/Spinner';
+import Alert from 'react-bootstrap/Alert';
 
 const StyledTopSection = styled(Container)`
   h1 {
@@ -21,6 +28,15 @@ const StyledTopSection = styled(Container)`
 `;
 
 const Main = () => {
+  const testInfoList = useSelector(state => state.testInfo.testInfoList);
+  const testInfoListLoading = useSelector(state => state.testInfo.testInfoListLoading);
+  const testInfoListError = useSelector(state => state.testInfo.testInfoListError);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchTestInfoList());
+  }, []);
+
   return (
     <div>
 
@@ -50,41 +66,23 @@ const Main = () => {
 
       <div className="pt-4 pb-5 bg-light">
         <Container className="py-3">
-          <h2 className="mb-4">Popular test</h2>
+          <h2 className="mt-3">Popular test</h2>
+          {testInfoListLoading &&
+            <div className="text-center mb-4">
+              <Spinner animation="border" />
+            </div>
+          }
+          {testInfoListError &&
+            <Alert variant="warning" className="mt-3">
+              {testInfoListError}
+            </Alert>
+          }
           <Row>
-            <Col md={4}>
-              <StyledTestCardSmall className="rounded p-3">
-                <div
-                  className="d-flex justify-content-between align-items-center mb-3">
-                  <p className="h4 mb-0">HTML</p>
-                </div>
-                <p className="mb-0">Some quick example text to build on the card
-                  title and make up
-                  the bulk of the card's content.</p>
-              </StyledTestCardSmall>
-            </Col>
-            <Col md={4}>
-              <StyledTestCardSmall className="rounded p-3">
-                <div
-                  className="d-flex justify-content-between align-items-center mb-3">
-                  <p className="h4 mb-0">Java Script</p>
-                </div>
-                <p className="mb-0">Some quick example text to build on the card
-                  title and make up
-                  the bulk of the card's content.</p>
-              </StyledTestCardSmall>
-            </Col>
-            <Col md={4}>
-              <StyledTestCardSmall className="rounded p-3">
-                <div
-                  className="d-flex justify-content-between align-items-center mb-3">
-                  <p className="h4 mb-0">SQL</p>
-                </div>
-                <p className="mb-0">Some quick example text to build on the card
-                  title and make up
-                  the bulk of the card's content.</p>
-              </StyledTestCardSmall>
-            </Col>
+            {testInfoList.slice(0, 3).map(test => (
+              <Col as={StyledLink} to={"/catalog/"+test.id} md={4} className="my-3">
+                <SmallTestCard test={test}/>
+              </Col>
+            ))}
           </Row>
         </Container>
       </div>

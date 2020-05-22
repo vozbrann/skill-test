@@ -1,5 +1,5 @@
 import React from 'react';
-import {convertMS} from '../../utils/helpers';
+import {convertMS} from '../utils/helpers';
 
 const Time = ({time, className, duration}) => {
   const parsedTime = convertMS(time);

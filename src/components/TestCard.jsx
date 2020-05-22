@@ -1,9 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {LineClamp} from './LineClamp';
-
-import {convertMS} from '../utils/helpers'
-import Time from './time/Time';
+import Time from './Time';
 
 const StyledTestCard = styled.div`
   transition: all 0.3s ease;

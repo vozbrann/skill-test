@@ -3,18 +3,12 @@ import {
   AUTH_USER,
   LOGIN_LOADING,
   SIGN_UP_LOADING,
-  USER_INFO_ERROR,
   USER_INFO_LOADING,
 } from '../actions/actionsTypes';
 
 const authUser = user => ({
   type: AUTH_USER,
   payload: user
-});
-
-const userInfoError = errorMessage => ({
-  type: USER_INFO_ERROR,
-  payload: errorMessage
 });
 
 const userInfoLoading = bool => ({
@@ -52,13 +46,8 @@ export const getUserInfo = () => {
       .then((response) => {
         dispatch(authUser(response.data));
       })
-      .catch((error) => {
+      .catch(() => {
         logoutUser();
-        if(error.response) {
-          dispatch(userInfoError(error.response.data.errorText));
-        } else {
-          dispatch(userInfoError("Something went wrong."));
-        }
       })
       .finally(() => {
         dispatch(userInfoLoading(false));
