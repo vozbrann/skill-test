@@ -1,20 +1,21 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Modal from 'react-bootstrap/Modal';
 import Time from '../Time';
 import AlertImage from '../../img/undraw_alert_mc7b.svg';
 import Image from 'react-bootstrap/Image';
-import {useHistory, useParams} from 'react-router-dom';
+import {Link, useHistory, useParams} from 'react-router-dom';
 import {fetchTestInfo} from '../../store/actions/testInfoActions';
+import {startTest} from '../../store/actions/testActions';
 import {useDispatch, useSelector} from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
-import {Link} from 'react-router-dom';
 
 const TestTitle = styled.h1`
   font-size: 5em;
@@ -39,9 +40,21 @@ const TestDetails = () => {
   const testInfoError = useSelector(state => state.testInfo.testInfoError);
   const user = useSelector(state => state.user.user);
 
+  const testStartLoading = useSelector(state => state.test.testStartLoading);
+  const testStartError = useSelector(state => state.test.testStartError);
+
   const dispatch = useDispatch();
   let history = useHistory();
   let {id} = useParams();
+
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalClose = () => setShowModal(false);
+  const handleModalShow = () => setShowModal(true);
+
+  const startTestHandle = () => {
+    dispatch(startTest(id, history));
+  };
 
   useEffect(() => {
     dispatch(fetchTestInfo(id));
@@ -49,6 +62,42 @@ const TestDetails = () => {
 
   return (
     <div className="position-relative">
+      <Modal show={showModal} onHide={handleModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Ready to start?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {testInfo && <p className="h5">Test: {testInfo.title}</p>}
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Aperiam at cum deleniti enim ipsam laudantium quasi quidem repellendus
+            repudiandae velit!</p>
+          {testInfo &&
+            <div>
+              <div className="d-flex">
+                <span className="mr-2">Test duration:</span>
+                <Time className="font-weight-bold" time={testInfo.duration} clear/>
+              </div>
+              <div className="d-flex">
+                <span className="mr-1">You can retake test in</span>
+                <Time className="font-weight-bold" time={testInfo.timeBetweenAttempts} clear/>
+              </div>
+            </div>
+          }
+          {testStartError &&
+            <Alert variant="warning">
+              {testStartError}
+            </Alert>
+          }
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleModalClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={startTestHandle}>
+            {testStartLoading ? "Loading..." : "Start"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Container>
         <Row>
           <Button onClick={() => history.goBack()} variant="outline-primary"
@@ -90,7 +139,8 @@ const TestDetails = () => {
                   </OverlayTrigger>
                   :
                   <StartButton variant="primary"
-                               className="text-white px-5">Start</StartButton>
+                               className="text-white px-5"
+                               onClick={handleModalShow}>Start</StartButton>
                 }
                 <div className="d-flex">
                   <Time time={testInfo.duration} duration className="mr-3"/>

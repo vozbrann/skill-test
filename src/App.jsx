@@ -16,11 +16,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import Catalog from './components/catalog/Catalog';
 import Profile from './components/profile/Profile';
 import TestDetails from './components/testDetails/TestDetails';
+import Test from './components/test/Test';
 
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.user);
   const userInfoLoading = useSelector(state => state.user.userInfoLoading);
+  const test = useSelector(state => state.test.test);
 
   useEffect(() => {
     dispatch(getUserInfo());
@@ -34,6 +36,8 @@ function App() {
           <Route exact path="/catalog" component={Catalog}/>
           <Route exact path="/catalog/:id" component={TestDetails}/>
           {(user || userInfoLoading) && <Route exact path="/profile" component={Profile}/>}
+          {/*{user && test && <Route exact path="/test" component={Test}/>}*/}
+          <Route exact path="/test" component={Test}/>
           ((!user || userInfoLoading) && <Route exact path="/signUp" component={SignUp}/>}
           {(!user || userInfoLoading) && <Route exact path="/login" component={Login}/>}
           <Route path="*" render={() => <Redirect to="/"/>}/>
