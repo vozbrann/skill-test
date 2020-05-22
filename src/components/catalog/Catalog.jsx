@@ -11,8 +11,6 @@ import StyledLink from '../StyledLink';
 import {useSelector, useDispatch} from 'react-redux';
 import { fetchTestInfoList } from '../../store/actions/testInfoActions'
 
-import { CSSTransition } from 'react-transition-group'
-
 const Catalog = () => {
   const [searchInput, setSearchInput] = useState("");
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import styled from 'styled-components';
@@ -7,16 +7,14 @@ import Col from 'react-bootstrap/Col';
 import Time from '../Time';
 import AlertImage from '../../img/undraw_alert_mc7b.svg';
 import Image from 'react-bootstrap/Image';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import {
+  fetchTestInfo,
+} from '../../store/actions/testInfoActions';
+import {useDispatch, useSelector} from 'react-redux';
+import Spinner from 'react-bootstrap/Spinner';
+import Alert from 'react-bootstrap/Alert';
 
-const testInfo = {
-  id: 1,
-  title: 'HTML',
-  description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquid aut autem consequatur distinctio dolor dolore dolores doloribus eaque eos est et eveniet excepturi facilis fuga id ipsa magnam mollitia nisi non provident quasi qui quidem quis reiciendis sapiente suscipit, voluptates? Accusantium cupiditate.',
-  img: 'https://www.positronx.io/wp-content/uploads/2019/06/space-in-html-00.jpg',
-  duration: 60000,
-  timeBetweenAttempts: 2592000000,
-};
 
 const TestTitle = styled.h1`
   font-size: 5em;
@@ -36,7 +34,18 @@ const StartButton = styled(Button)`
 `;
 
 const TestDetails = () => {
+  const testInfo = useSelector(state => state.testInfo.testInfo);
+  const testInfoLoading = useSelector(state => state.testInfo.testInfoLoading);
+  const testInfoError = useSelector(state => state.testInfo.testInfoError);
+
+  const dispatch = useDispatch();
   let history = useHistory();
+  let { id } = useParams();
+
+  useEffect(() => {
+    dispatch(fetchTestInfo(id));
+  }, []);
+
   return (
     <div className="position-relative">
       <Container>
@@ -45,22 +54,32 @@ const TestDetails = () => {
             <span className="material-icons">keyboard_backspace</span>
           </Button>
         </Row>
-        <Row className=" mb-5 shadow">
-          <Col lg={8} className="p-5">
-            <TestTitle className="mb-3">{testInfo.title}</TestTitle>
-            <p className="mb-4">{testInfo.description}</p>
-            <div className="d-flex justify-content-between">
-              <StartButton variant="primary" className="text-white px-5">Start</StartButton>
-              <div className="d-flex">
-                <Time time={testInfo.duration} duration className="mr-3"/>
-                <Time time={testInfo.timeBetweenAttempts}/>
+        {testInfoError &&
+          <Alert variant="warning">
+            {testInfoError}
+          </Alert>
+        }
+        {testInfoLoading ?
+        <div className="text-center mb-4">
+          <Spinner animation="border" />
+        </div> :
+          <Row className=" mb-5 shadow">
+            <Col lg={8} className="p-5">
+              <TestTitle className="mb-3">{testInfo.title}</TestTitle>
+              <p className="mb-4">{testInfo.description}</p>
+              <div className="d-flex justify-content-between">
+                <StartButton variant="primary" className="text-white px-5">Start</StartButton>
+                <div className="d-flex">
+                  <Time time={testInfo.duration} duration className="mr-3"/>
+                  <Time time={testInfo.timeBetweenAttempts}/>
+                </div>
               </div>
-            </div>
-          </Col>
-          <Col className="px-0">
-            <TestImage src={testInfo.img}/>
-          </Col>
-        </Row>
+            </Col>
+            <Col className="px-0">
+              <TestImage src={testInfo.img}/>
+            </Col>
+          </Row>
+        }
 
         <h2 className="h1 mb-4">Rules</h2>
         <Row className="mb-5">

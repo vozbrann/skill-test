@@ -3,6 +3,9 @@ import {
   TEST_INFO_LIST_ERROR,
   TEST_INFO_LIST_LOADING,
   TEST_INFO_LIST_SET,
+  TEST_INFO_ERROR,
+  TEST_INFO_LOADING,
+  TEST_INFO_SET
 } from '../actions/actionsTypes';
 
 const testList = [
@@ -48,6 +51,15 @@ const testList = [
   },
 ];
 
+const testInfo = {
+  id: 5,
+  title: 'Vue.js',
+  description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquid aut autem consequatur distinctio dolor dolore dolores doloribus eaque eos est et eveniet excepturi facilis fuga id ipsa magnam mollitia nisi non provident quasi qui quidem quis reiciendis sapiente suscipit, voluptates? Accusantium cupiditate dolores eaque ipsum iste magni maiores minima odit quae quibusdam quisquam, quo reiciendis repudiandae sapiente temporibus, tenetur!',
+  img: 'https://markup-ua.com/blog/wp-content/uploads/2017/09/vue.jpeg',
+  duration: 300000,
+  timeBetweenAttempts: 86400000,
+};
+
 const setTestInfoList = testInfoList => ({
   type: TEST_INFO_LIST_SET,
   payload: testInfoList
@@ -60,6 +72,21 @@ const testInfoListLoading = bool => ({
 
 const testInfoListError = error => ({
   type: TEST_INFO_LIST_ERROR,
+  payload: error
+});
+
+const setTestInfo = testInfo => ({
+  type: TEST_INFO_SET,
+  payload: testInfo
+});
+
+const testInfoLoading = bool => ({
+  type: TEST_INFO_LOADING,
+  payload: bool
+});
+
+const testInfoError = error => ({
+  type: TEST_INFO_ERROR,
   payload: error
 });
 
@@ -86,6 +113,33 @@ export const fetchTestInfoList = () => {
     setTimeout(() => {
       dispatch(setTestInfoList(testList));
       dispatch(testInfoListLoading(false));
+    }, 2000)
+  }
+};
+
+export const fetchTestInfo = (id) => {
+  return (dispatch, getState) => {
+    // dispatch(testInfoListLoading(true));
+    // api.get(`/${id}`, {
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Authorization': `JWT ${localStorage.getItem("access_token")}`
+    //   },
+    // })
+    //   .then((response) => {
+    //     dispatch(setTestInfoList(response.data));
+    //   })
+    //   .catch((error) => {
+    //     dispatch(testInfoListError(error.response.data));
+    //   })
+    //   .finally(() => {
+    //     dispatch(testInfoListLoading(false));
+    //   })
+
+    dispatch(testInfoLoading(true));
+    setTimeout(() => {
+      dispatch(setTestInfo(testInfo));
+      dispatch(testInfoLoading(false));
     }, 2000)
   }
 };
