@@ -49,7 +49,11 @@ const TestDetails = () => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const handleModalClose = () => setShowModal(false);
+  const handleModalClose = () => {
+    if (!testStartLoading) {
+      setShowModal(false)
+    }
+  };
   const handleModalShow = () => setShowModal(true);
 
   const startTestHandle = () => {
@@ -90,10 +94,10 @@ const TestDetails = () => {
           }
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleModalClose}>
+          <Button disabled={testStartLoading} variant="secondary" onClick={handleModalClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={startTestHandle}>
+          <Button disabled={testStartLoading} variant="primary" onClick={startTestHandle}>
             {testStartLoading ? "Loading..." : "Start"}
           </Button>
         </Modal.Footer>

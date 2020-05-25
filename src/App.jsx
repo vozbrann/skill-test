@@ -30,14 +30,14 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <AppBar/>
+        {!test && <AppBar/>}
         <Switch>
           <Route exact path="/" component={Main}/>
           <Route exact path="/catalog" component={Catalog}/>
           <Route exact path="/catalog/:id" component={TestDetails}/>
           {(user || userInfoLoading) && <Route exact path="/profile" component={Profile}/>}
-          {/*{user && test && <Route exact path="/test" component={Test}/>}*/}
-          <Route exact path="/test" component={Test}/>
+          {user && test && <Route exact path="/test" component={Test}/>}
+          {/*<Route exact path="/test" component={Test}/>*/}
           ((!user || userInfoLoading) && <Route exact path="/signUp" component={SignUp}/>}
           {(!user || userInfoLoading) && <Route exact path="/login" component={Login}/>}
           <Route path="*" render={() => <Redirect to="/"/>}/>

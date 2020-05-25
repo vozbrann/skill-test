@@ -79,7 +79,7 @@ const Main = () => {
           }
           <Row>
             {testInfoList.slice(0, 3).map(test => (
-              <Col as={StyledLink} to={"/catalog/"+test.id} md={4} className="my-3">
+              <Col key={test.id} as={StyledLink} to={"/catalog/"+test.id} md={4} className="my-3">
                 <SmallTestCard test={test}/>
               </Col>
             ))}
