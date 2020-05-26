@@ -14,6 +14,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 
 import {submitTest} from '../../store/actions/testActions'
 import {useHistory} from 'react-router-dom';
+import TestControlBar from './TestControlBar';
 
 const QuestionList = styled.div`
   max-height: 80vh;
@@ -101,6 +102,7 @@ const Test = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <TestControlBar/>
       <Container fluid className="pb-5">
         <Row>
           <Col md={3} className="px-0">
@@ -130,7 +132,7 @@ const Test = () => {
         <Button onClick={handlePrev} className="mr-3 my-3"
                 variant="secondary">Previous</Button>
         {activeQuestion === (test.questions.length - 1) ?
-          <Button onClick={handleSubmitModalShow} className="my-3"
+          <Button disabled={testSubmitLoading} onClick={handleSubmitModalShow} className="my-3"
                   variant="success">Submit</Button>
           :
           <Button onClick={handleNext} className="my-3"

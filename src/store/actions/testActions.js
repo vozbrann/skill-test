@@ -5,7 +5,9 @@ import {
   TEST_START_ERROR,
   SET_SELECTED_ANSWERS,
   TEST_SUBMIT_ERROR,
-  TEST_SUBMIT_LOADING
+  TEST_SUBMIT_LOADING,
+  TEST_CANCEL_LOADING,
+  TEST_CANCEL_ERROR
 } from '../actions/actionsTypes';
 
 const testData = {
@@ -155,6 +157,16 @@ const testSubmitError = error => ({
   payload: error
 });
 
+const testCancelLoading = bool => ({
+  type: TEST_CANCEL_LOADING,
+  payload: bool
+});
+
+const testCancelError = error => ({
+  type: TEST_CANCEL_ERROR,
+  payload: error
+});
+
 export const startTest = (id, history) => {
   return (dispatch, getState) => {
 
@@ -172,11 +184,23 @@ export const submitTest = (history) => {
 
     dispatch(testSubmitLoading(true));
     setTimeout(() => {
+      history.push('/');
       console.log(getState().test.selectedAnswers);
       dispatch(testSet(null));
       dispatch(setSelectedAnswers({}));
       dispatch(testSubmitLoading(false));
-      history.push('/')
+    }, 2000)
+  }
+};
+
+export const cancelTest = (history) => {
+  return (dispatch, getState) => {
+    dispatch(testCancelLoading(true));
+    setTimeout(() => {
+      history.push('/');
+      dispatch(testSet(null));
+      dispatch(setSelectedAnswers({}));
+      dispatch(testCancelLoading(false));
     }, 2000)
   }
 };
