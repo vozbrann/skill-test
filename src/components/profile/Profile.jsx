@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import AchievementsImage from '../../img/undraw_order_confirmed_aaw7.svg';
 
@@ -7,27 +7,17 @@ import Badge from 'react-bootstrap/Badge';
 
 import UserAvatar from '../UserAvatar';
 
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Spinner from 'react-bootstrap/Spinner';
+import Alert from 'react-bootstrap/Alert';
+import {fetchResults} from '../../store/actions/testResultsActions';
 
 const MainContainer = styled.div`
   z-index: 10;
-`;
-
-const ScorePreview = styled(Link)`
-  transition: all 0.3s ease;
-  color: black;
-  text-decoration: none;
-  &:hover {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.15);
-  }
 `;
 
 const BgTopImage = styled.img`
@@ -44,7 +34,15 @@ const StyledBadge = styled(Badge)`
 `;
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const user = useSelector(state => state.user.user);
+  const resultList = useSelector(state => state.testResults.resultList);
+  const resultListLoading = useSelector(state => state.testResults.resultListLoading);
+  const resultListError = useSelector(state => state.testResults.resultListError);
+
+  useEffect(() => {
+    dispatch(fetchResults());
+  }, []);
   return (
     <MainContainer className="bg-light position-relative">
       <BgTopImage src="https://source.unsplash.com/random"/>
@@ -71,69 +69,39 @@ const Profile = () => {
       <Container className="pb-5">
         <div className="bg-white shadow">
           <h2 className="text-center py-4 border-bottom">Achievements</h2>
-          <Row className="p-4 pb-0">
+          <Row className="p-4 pt-5 pb-0">
             <Col md={5}>
               <Image className="px-5" fluid src={AchievementsImage}/>
             </Col>
             <Col className="mr-4">
-              <ScorePreview to="score/1"
-                            className="border d-flex justify-content-between align-items-center p-3 mb-3">
-                <div className="d-flex">
-                  <p className="h4 mb-0 mr-3">HTML</p>
+              {resultListLoading && <div className="text-center my-3"><Spinner animation="border" /></div>}
+              {resultListError &&
+              <Alert variant="warning">
+                resultListError
+              </Alert>}
+              {resultList.map(result => (
+                <div key={result.id} className="shadow d-flex justify-content-between align-items-center p-3 mb-3">
+                  <div className="d-flex">
+                    <p className="h4 mb-0 mr-3">{result.title}</p>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <p className="mb-0 mr-3 text-secondary">{result.date}</p>
+                    <p className="h4 mb-0">{result.score}%</p>
+                    {result.public ?
+                      <StyledBadge className="align-self-center ml-2" pill
+                                   variant="success">
+                        published
+                      </StyledBadge> :
+                      <StyledBadge className="align-self-center ml-2" pill
+                                   variant="secondary">
+                        private
+                      </StyledBadge>
+                    }
+                  </div>
                 </div>
-                <div className="d-flex align-items-center">
-                  <p className="mb-0 mr-3 text-secondary">17:52 18.05.2020</p>
-                  <p className="h4 mb-0">74%</p>
-                  <StyledBadge className="align-self-center ml-2" pill
-                               variant="success">
-                    published
-                  </StyledBadge>
-                </div>
-              </ScorePreview>
-              <ScorePreview to="score/1"
-                            className="border d-flex justify-content-between align-items-center p-3 mb-3">
-                <div className="d-flex">
-                  <p className="h4 mb-0 mr-3">Relational Databases</p>
-                </div>
-                <div className="d-flex align-items-center">
-                  <p className="mb-0 mr-3 text-secondary">17:52 18.05.2020</p>
-                  <p className="h4 mb-0">74%</p>
-                  <StyledBadge className="align-self-center ml-2" pill
-                               variant="success">
-                    published
-                  </StyledBadge>
-                </div>
-              </ScorePreview>
-              <ScorePreview to="score/1"
-                            className="border d-flex justify-content-between align-items-center p-3 mb-3">
-                <div className="d-flex">
-                  <p className="h4 mb-0 mr-3">HTML</p>
-                </div>
-                <div className="d-flex align-items-center">
-                  <p className="mb-0 mr-3 text-secondary">17:52 18.05.2020</p>
-                  <p className="h4 mb-0">74%</p>
-                  <StyledBadge className="align-self-center ml-2" pill
-                               variant="success">
-                    published
-                  </StyledBadge>
-                </div>
-              </ScorePreview>
-              <ScorePreview to="score/1"
-                            className="border d-flex justify-content-between align-items-center p-3 mb-3">
-                <div className="d-flex">
-                  <p className="h4 mb-0 mr-3">HTML</p>
-                </div>
-                <div className="d-flex align-items-center">
-                  <p className="mb-0 mr-3 text-secondary">17:52 18.05.2020</p>
-                  <p className="h4 mb-0">74%</p>
-                  <StyledBadge className="align-self-center ml-2" pill
-                               variant="secondary">
-                    private
-                  </StyledBadge>
-                </div>
-              </ScorePreview>
+              ))}
               <p className="text-right">
-                <Link to="/userResults">View more...</Link>
+                <Link to="/myResults">View more...</Link>
               </p>
             </Col>
           </Row>

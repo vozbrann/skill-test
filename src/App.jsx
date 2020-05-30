@@ -17,6 +17,7 @@ import Catalog from './components/catalog/Catalog';
 import Profile from './components/profile/Profile';
 import TestDetails from './components/testDetails/TestDetails';
 import Test from './components/test/Test';
+import UserTestResults from './components/testResults/UserTestResults';
 
 function App() {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ function App() {
           <Route exact path="/catalog" component={Catalog}/>
           <Route exact path="/catalog/:id" component={TestDetails}/>
           {(user || userInfoLoading) && <Route exact path="/profile" component={Profile}/>}
+          {(user || userInfoLoading) && <Route exact path="/myResults" component={UserTestResults}/>}
           {user && test && <Route exact path="/test" component={Test}/>}
           ((!user || userInfoLoading) && <Route exact path="/signUp" component={SignUp}/>}
           {(!user || userInfoLoading) && <Route exact path="/login" component={Login}/>}

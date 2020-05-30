@@ -22,9 +22,12 @@ const AppBar = () => {
         <Navbar.Brand className="font-weight-bold" as={Link} to="/">SkillTest</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" onClick={() => setNavExpanded(false)}>
-          <Nav className="mr-auto">
+          <Nav>
             <Nav.Link exact as={NavLink} to="/">Home</Nav.Link>
             <Nav.Link exact as={NavLink} to="/catalog">Catalog</Nav.Link>
+            {user && <>
+              <Nav.Link exact as={NavLink} to="/myResults">My results</Nav.Link>
+            </>}
           </Nav>
           <Nav className="ml-auto">
             {userInfoLoading ?
