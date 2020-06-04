@@ -2,6 +2,7 @@ import React from 'react';
 import {LineClamp} from './LineClamp';
 import Time from './Time';
 import styled from 'styled-components';
+import Skeleton from 'react-loading-skeleton';
 
 const StyledTestCardSmall = styled.div`
   transition: all 0.3s ease;
@@ -24,18 +25,31 @@ const StyledTestCardSmall = styled.div`
   }
 `;
 
-
 const SmallTestCard = ({test}) => {
   return (
     <StyledTestCardSmall className="rounded p-3">
       <div
         className="d-flex justify-content-between align-items-center mb-3">
-        <p className="h4 mb-0">{test.title}</p>
+        <p className="h4 mb-0 w-100">{(test && test.title) ||
+        <Skeleton width={100}/>}</p>
       </div>
-      <LineClamp lines={2} className="">{test.description}</LineClamp>
+      <LineClamp lines={2} className="">{(test && test.description) ||
+      <Skeleton count={2}/>}</LineClamp>
       <div className="d-flex align-items-center justify-content-end">
-        <Time time={test.duration} className="mr-3"/>
-        <Time time={test.timeBetweenAttempts} duration/>
+        {test ?
+          <>
+            <Time time={test.duration} className="mr-3"/>
+            < Time time={test.timeBetweenAttempts} duration/>
+          </> :
+         <span>
+           <span className="mr-3">
+             <Skeleton width={80}/>
+           </span>
+           <span>
+             <Skeleton width={80}/>
+           </span>
+         </span>
+        }
       </div>
     </StyledTestCardSmall>
   );

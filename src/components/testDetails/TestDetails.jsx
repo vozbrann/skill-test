@@ -12,10 +12,10 @@ import {Link, useHistory, useParams} from 'react-router-dom';
 import {fetchTestInfo} from '../../store/actions/testInfoActions';
 import {startTest} from '../../store/actions/testActions';
 import {useDispatch, useSelector} from 'react-redux';
-import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
+import Skeleton from 'react-loading-skeleton';
 
 const TestTitle = styled.h1`
   font-size: 5em;
@@ -114,49 +114,62 @@ const TestDetails = () => {
           {testInfoError}
         </Alert>
         }
-        {testInfoLoading ?
-          <div className="text-center mb-4">
-            <Spinner animation="border"/>
-          </div> :
-          <Row className=" mb-5 shadow">
-            <Col lg={8} className="p-5">
-              <TestTitle className="mb-3">{testInfo.title}</TestTitle>
-              <p className="mb-4">{testInfo.description}</p>
-              <div className="d-flex justify-content-between">
-                {!user ?
-                  <OverlayTrigger
-                    trigger="click"
-                    placement='right'
-                    overlay={
-                      <Popover id={`popover-positioned-right`}>
-                        <Popover.Title as="h3">Authentication
-                          required</Popover.Title>
-                        <Popover.Content>
-                          Please, <Link to="/login">login</Link> or <Link
-                          to="/signUp">sign up</Link>
-                        </Popover.Content>
-                      </Popover>
-                    }
-                  >
-                    <StartButton variant="primary"
-                                 className="text-white px-5">Start</StartButton>
-                  </OverlayTrigger>
-                  :
+        <Row className=" mb-5 shadow">
+          <Col lg={8} className="p-5">
+            <TestTitle className="mb-3">{testInfo && !testInfoLoading ? testInfo.title : <Skeleton width={200}/>}</TestTitle>
+            <p className="mb-4">{testInfo && !testInfoLoading ? testInfo.description : <Skeleton count={5}/>}</p>
+            <div className="d-flex justify-content-between">
+              {!testInfo || testInfoLoading ? <Skeleton height={40} width={160} /> :
+                <>{!user ?
+                <OverlayTrigger
+                  trigger="click"
+                  placement='right'
+                  overlay={
+                    <Popover id={`popover-positioned-right`}>
+                      <Popover.Title as="h3">Authentication
+                        required</Popover.Title>
+                      <Popover.Content>
+                        Please, <Link to="/login">login</Link> or <Link
+                        to="/signUp">sign up</Link>
+                      </Popover.Content>
+                    </Popover>
+                  }
+                >
                   <StartButton variant="primary"
-                               className="text-white px-5"
-                               onClick={handleModalShow}>Start</StartButton>
+                               className="text-white px-5">Start</StartButton>
+                </OverlayTrigger>
+                :
+                <StartButton variant="primary"
+                             className="text-white px-5"
+                             onClick={handleModalShow}>Start</StartButton>
+              }
+              </>}
+              <div className="d-flex">
+                {testInfo && !testInfoLoading ?
+                  <>
+                    <Time time={testInfo.duration } duration className="mr-3"/>
+                    <Time time={testInfo.timeBetweenAttempts}/>
+                  </> :
+                  <span>
+           <span className="mr-3">
+             <Skeleton width={80}/>
+           </span>
+           <span>
+             <Skeleton width={80}/>
+           </span>
+         </span>
                 }
-                <div className="d-flex">
-                  <Time time={testInfo.duration} duration className="mr-3"/>
-                  <Time time={testInfo.timeBetweenAttempts}/>
-                </div>
               </div>
-            </Col>
-            <Col className="px-0">
-              <TestImage src={testInfo.img}/>
-            </Col>
-          </Row>
-        }
+            </div>
+          </Col>
+          <Col className="px-0">
+            {testInfo && !testInfoLoading ? <TestImage src={testInfo.img}/> :
+              <div style={{lineHeight: '1'}}>
+                <Skeleton height={400}/>
+              </div>
+            }
+          </Col>
+        </Row>
 
         <h2 className="h1 mb-4">Rules</h2>
         <Row className="mb-5">

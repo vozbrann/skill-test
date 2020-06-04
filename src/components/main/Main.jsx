@@ -15,8 +15,6 @@ import {Link} from 'react-router-dom';
 import StyledLink from '../StyledLink';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchTestInfoList} from '../../store/actions/testInfoActions';
-import {LineClamp} from '../LineClamp';
-import Time from '../Time';
 import SmallTestCard from '../SmallTestCard';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
@@ -29,8 +27,10 @@ const StyledTopSection = styled(Container)`
 
 const Main = () => {
   const testInfoList = useSelector(state => state.testInfo.testInfoList);
-  const testInfoListLoading = useSelector(state => state.testInfo.testInfoListLoading);
-  const testInfoListError = useSelector(state => state.testInfo.testInfoListError);
+  const testInfoListLoading = useSelector(
+    state => state.testInfo.testInfoListLoading);
+  const testInfoListError = useSelector(
+    state => state.testInfo.testInfoListError);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -55,7 +55,8 @@ const Main = () => {
               consequatur dolorum, eius eligendi expedita iste mollitia nisi,
               officia porro quaerat quas quasi qui.</p>
             <div>
-              <Button as={Link} to="/catalog" variant="primary px-5">Explore tests</Button>
+              <Button as={Link} to="/catalog" variant="primary px-5">Explore
+                tests</Button>
             </div>
           </Col>
           <Col className="px-4">
@@ -67,23 +68,37 @@ const Main = () => {
       <div className="pt-4 pb-5 bg-light">
         <Container className="py-3">
           <h2 className="mt-3">Popular test</h2>
-          {testInfoListLoading &&
-            <div className="text-center mb-4">
-              <Spinner animation="border" />
-            </div>
+          {testInfoListLoading && !!testInfoList.length &&
+          <div className="text-center mb-4">
+            <Spinner animation="border"/>
+          </div>
           }
           {testInfoListError &&
-            <Alert variant="warning" className="mt-3">
-              {testInfoListError}
-            </Alert>
+          <Alert variant="warning" className="mt-3">
+            {testInfoListError}
+          </Alert>
           }
-          <Row>
-            {testInfoList.slice(0, 3).map(test => (
-              <Col key={test.id} as={StyledLink} to={"/catalog/"+test.id} md={4} className="my-3">
-                <SmallTestCard test={test}/>
+          {testInfoList.length ?
+            <Row>
+              {testInfoList.slice(0, 3).map(test => (
+                <Col key={test.id} as={StyledLink} to={'/catalog/' + test.id}
+                     md={4} className="my-3">
+                  <SmallTestCard test={test}/>
+                </Col>
+              ))}
+            </Row> :
+            <Row>
+              <Col md={4} className="my-3">
+                <SmallTestCard />
               </Col>
-            ))}
-          </Row>
+              <Col md={4} className="my-3">
+                <SmallTestCard />
+              </Col>
+              <Col md={4} className="my-3">
+                <SmallTestCard />
+              </Col>
+            </Row>
+          }
         </Container>
       </div>
 
@@ -121,10 +136,12 @@ const Main = () => {
           <Row>
             <Col className="d-flex flex-column justify-content-center px-4">
               <h2 className="mb-4">Lorem ipsum dolor sit amet</h2>
-              <p className="h5 mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab
+              <p className="h5 mb-4">Lorem ipsum dolor sit amet, consectetur
+                adipisicing elit. Ab
                 eaque, illum ipsa laborum quae tempore veritatis. Eos error
                 facilis quidem?</p>
-              <p className="h5 mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At
+              <p className="h5 mb-4">Lorem ipsum dolor sit amet, consectetur
+                adipisicing elit. At
                 perspiciatis sit tempore?</p>
               <div>
                 <Button disabled variant="primary px-5">Sign up as HR</Button>

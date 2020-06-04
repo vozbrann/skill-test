@@ -92,15 +92,14 @@ const Test = () => {
 
     const nonSelectedStyle = {
         msUserSelect: "none",
-        mozUserSelect: "none",
-        webkitUserSelect: "none",
+        MozUserSelect: "none",
+        WebkitUserSelect: "none",
         userSelect: "none"
     };
 
     return (
         <div onContextMenu={handleRightClick} style={nonSelectedStyle}>
-            <Toast className="border-warning"
-                   onClose={() => setShowCheatingMessage(false)} show={showCheatingMessage}
+            <Toast onClose={() => setShowCheatingMessage(false)} show={showCheatingMessage}
                    style={{
                        position: 'fixed',
                        bottom: 80,
@@ -108,7 +107,7 @@ const Test = () => {
                        zIndex: 10,
                        width: "300px"
                    }}>
-                <Toast.Header className="bg-warning">
+                <Toast.Header className="bg-light">
                     <strong className="mr-auto text-black-50">Cheating detected</strong>
                 </Toast.Header>
                 <Toast.Body>Don't leave the page. And don't try to copy questions.</Toast.Body>

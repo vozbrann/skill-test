@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {LineClamp} from './LineClamp';
 import Time from './Time';
+import Skeleton from 'react-loading-skeleton';
 
 const StyledTestCard = styled.div`
   transition: all 0.3s ease;
@@ -21,18 +22,30 @@ const TestImage = styled.img`
 `;
 
 const TestCard = ({testInfo}) => {
-  const {title, description, img, duration, timeBetweenAttempts} = testInfo;
-
   return (
     <StyledTestCard>
-      <TestImage
-        src={img}/>
+      {testInfo ? <TestImage
+        src={testInfo.img}/> : <div style={{lineHeight: '1'}}><Skeleton
+        height={200}/></div>}
       <div className="p-3">
-        <p className="h2">{title}</p>
-        <LineClamp lines={3}>{description}</LineClamp>
+        <p className="h2">{testInfo ? testInfo.title : <Skeleton width={150}/>}</p>
+        <LineClamp lines={3}>{testInfo ? testInfo.description : <Skeleton
+          count={3}/>}</LineClamp>
         <div className="d-flex align-items-center justify-content-end">
-          <Time time={duration} className="mr-3"/>
-          <Time time={timeBetweenAttempts} duration/>
+          {testInfo ?
+            <>
+              <Time time={testInfo.duration} className="mr-3"/>
+              <Time time={testInfo.timeBetweenAttempts} duration/>
+            </> :
+            <span>
+           <span className="mr-3">
+             <Skeleton width={80}/>
+           </span>
+           <span>
+             <Skeleton width={80}/>
+           </span>
+         </span>
+          }
         </div>
       </div>
     </StyledTestCard>
