@@ -14,7 +14,7 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
-import {fetchResults} from '../../store/actions/testResultsActions';
+import {fetchUserResults} from '../../store/actions/testResultsActions';
 
 const MainContainer = styled.div`
   z-index: 10;
@@ -36,12 +36,12 @@ const StyledBadge = styled(Badge)`
 const Profile = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.user);
-  const resultList = useSelector(state => state.testResults.resultList);
-  const resultListLoading = useSelector(state => state.testResults.resultListLoading);
-  const resultListError = useSelector(state => state.testResults.resultListError);
+  const resultList = useSelector(state => state.testResults.userResultList);
+  const resultListLoading = useSelector(state => state.testResults.userResultListLoading);
+  const resultListError = useSelector(state => state.testResults.userResultListError);
 
   useEffect(() => {
-    dispatch(fetchResults());
+    dispatch(fetchUserResults());
   }, []);
   return (
     <MainContainer className="bg-light position-relative">

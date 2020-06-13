@@ -4,10 +4,13 @@ import {
   RESULT_LIST_LOADING,
   RESULT_LIST_ERROR,
   RESULT_STATUS_LOADING,
-  RESULT_STATUS_ERROR
+  RESULT_STATUS_ERROR,
+  UPDATE_USER_RESULT_LIST,
+  USER_RESULT_LIST_LOADING,
+  USER_RESULT_LIST_ERROR
 } from '../actions/actionsTypes';
 
-const results = [
+const userResults = [
   {
     id:"1234tysdf",
     title:"HTML",
@@ -37,6 +40,64 @@ const results = [
     date:"12:00 27.05.2020",
   }
 ];
+
+const results = [
+  {
+    id:"1234tysdf",
+    title:"HTML",
+    score:50,
+    public:false,
+    date:"14:59 27.05.2020",
+    user: {
+      username:"Roman"
+    }
+  },
+  {
+    id:"1234tyvd",
+    title:"JavaScript",
+    score:89,
+    public:false,
+    date:"14:59 27.05.2020",
+    user: {
+      username:"Ivan"
+    }
+  },
+  {
+    id:"1234tyasdf",
+    title:"CSS",
+    score:74,
+    public:true,
+    date:"14:59 27.05.2019",
+    user: {
+      username:"Ivan"
+    }
+  },
+  {
+    id:"1234tyasdfsd",
+    title:"SQL",
+    score:54,
+    public:false,
+    date:"12:00 27.05.2020",
+    user: {
+      username:"Ivan"
+    }
+  }
+];
+
+const updateUserResultList = resultList => ({
+  type: UPDATE_USER_RESULT_LIST,
+  payload: resultList
+});
+
+const testUserResultListLoading = bool => ({
+  type: USER_RESULT_LIST_LOADING,
+  payload: bool
+});
+
+const testUserResultListError = error => ({
+  type: USER_RESULT_LIST_ERROR,
+  payload: error
+});
 
 const updateResultList = resultList => ({
   type: UPDATE_RESULT_LIST,
@@ -73,11 +134,21 @@ export const fetchResults = () => {
   }
 };
 
+export const fetchUserResults = () => {
+  return (dispatch, getState) => {
+    dispatch(testUserResultListLoading(true));
+    setTimeout(() => {
+      dispatch(updateUserResultList(userResults));
+      dispatch(testUserResultListLoading(false));
+    }, 2000)
+  }
+};
+
 export const changePublicStatus = (newStatus, handleStatusModalClose) => {
   return (dispatch, getState) => {
     dispatch(testStatusLoading(true));
     setTimeout(() => {
-      dispatch(updateResultList(results));
+      dispatch(updateUserResultList(userResults));
       dispatch(testStatusLoading(false));
       handleStatusModalClose();
     }, 2000)

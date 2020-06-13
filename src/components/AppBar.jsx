@@ -27,6 +27,7 @@ const AppBar = () => {
             <Nav.Link exact as={NavLink} to="/catalog">Catalog</Nav.Link>
             {user && <>
               <Nav.Link exact as={NavLink} to="/myResults">My results</Nav.Link>
+              <Nav.Link exact as={NavLink} to="/allResults">All results</Nav.Link>
             </>}
           </Nav>
           <Nav className="ml-auto">
