@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import AppBar from './components/AppBar';
 import Main from './components/main/Main';
 import {
-  BrowserRouter as Router,
   Redirect,
   Route,
   Switch,
@@ -31,24 +30,22 @@ function App() {
     dispatch(getUserInfo());
   }, []);
   return (
-    <Router>
-      <div className="App">
-        {!test && <AppBar/>}
-        <Switch>
-          <Route exact path="/" component={Main}/>
-          <Route exact path="/catalog" component={Catalog}/>
-          <Route exact path="/catalog/:id" component={TestDetails}/>
-          {(user || userInfoLoading) && <Route exact path="/profile" component={Profile}/>}
-          {(user || userInfoLoading) && <Route exact path="/myResults" component={UserTestResults}/>}
-          {(user || userInfoLoading) && <Route exact path="/allResults" component={AllResults}/>}
-          <Route exact path="/result/:id" component={TestScore}/>
-          {user && test && <Route exact path="/test" component={Test}/>}
-          ((!user || userInfoLoading) && <Route exact path="/signUp" component={SignUp}/>}
-          {(!user || userInfoLoading) && <Route exact path="/login" component={Login}/>}
-          <Route path="*" render={() => <Redirect to="/"/>}/>
-        </Switch>
-      </div>
-    </Router>
+    <div className="App">
+      {!test && <AppBar/>}
+      <Switch>
+        <Route exact path="/" component={Main}/>
+        <Route exact path="/catalog" component={Catalog}/>
+        <Route exact path="/catalog/:id" component={TestDetails}/>
+        {(user || userInfoLoading) && <Route exact path="/profile" component={Profile}/>}
+        {(user || userInfoLoading) && <Route exact path="/myResults" component={UserTestResults}/>}
+        {(user || userInfoLoading) && <Route exact path="/allResults" component={AllResults}/>}
+        {(user || userInfoLoading) && <Route exact path="/result/:id" component={TestScore}/>}
+        {user && test && <Route exact path="/test" component={Test}/>}
+        {(!user || userInfoLoading) && <Route exact path="/login" component={Login}/>}
+        {(!user || userInfoLoading) && <Route exact path="/signUp" component={SignUp}/>}
+        <Route path="*" render={() => <Redirect to="/"/>}/>
+      </Switch>
+    </div>
   );
 }
 

@@ -65,7 +65,7 @@ const TestDetails = () => {
   }, []);
 
   return (
-    <div className="position-relative">
+    <div className="position-relative" data-testid='testDetails-page'>
       <Modal show={showModal} onHide={handleModalClose}>
         <Modal.Header closeButton>
           <Modal.Title>Ready to start?</Modal.Title>

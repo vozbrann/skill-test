@@ -30,7 +30,7 @@ const Login = () => {
   let history = useHistory();
 
   return (
-    <AuthContainer>
+    <AuthContainer data-testid='login-page'>
       <h1 className="h3">Login</h1>
       <p className="text-secondary mb-4">Welcome back, please login to your account.</p>
       <Formik

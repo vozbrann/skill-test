@@ -109,6 +109,7 @@ export const signUpUser = (user, history, setErrors) => {
       })
       .finally(() => {
         dispatch(signUpLoading(false));
+        console.log(getState());
       })
   }
 };

@@ -17,9 +17,9 @@ const MainContainer = styled(Container)`
 }
 `;
 
-const AuthContainer = ({children}) => {
+const AuthContainer = ({children, ...attributes}) => {
   return (
-    <div className="py-3 py-md-5">
+    <div className="py-3 py-md-5" {...attributes}>
       <MainContainer className="bg-white">
         <Row>
           <Col md={6} className="p-5 d-none d-md-flex bg-light align-items-center">

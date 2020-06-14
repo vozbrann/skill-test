@@ -42,7 +42,7 @@ const SignUp = () => {
   let history = useHistory();
 
   return (
-    <AuthContainer>
+    <AuthContainer data-testid='signUp-page'>
       <h1 className="h3">Create Account</h1>
       <p className="text-secondary mb-4">Fill the below form to create a new account.</p>
       <Formik

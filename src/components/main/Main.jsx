@@ -38,8 +38,7 @@ const Main = () => {
   }, []);
 
   return (
-    <div>
-
+    <div data-testid='main-page'>
       <StyledTopSection className="my-5 py-3">
         <Row>
           <Col md={7}

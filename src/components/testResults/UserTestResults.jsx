@@ -44,7 +44,7 @@ const UserTestResults = () => {
   };
 
   return (
-    <Container className="my-3">
+    <Container className="my-3" data-testid='myResults-page'>
       {activeTestRes &&
       <Modal show={showStatusModal} onHide={handleStatusModalClose}>
         <Modal.Header closeButton>

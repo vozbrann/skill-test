@@ -35,7 +35,7 @@ const Catalog = () => {
   }, []);
 
   return (
-    <div>
+    <div data-testid='catalog-page'>
       <Container fluid="lg" className="py-4">
         <h1 className="mb-4">Catalog</h1>
         <InputGroup className="mb-5 col-md-5 px-0">

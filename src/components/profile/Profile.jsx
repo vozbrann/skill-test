@@ -44,7 +44,7 @@ const Profile = () => {
     dispatch(fetchUserResults());
   }, []);
   return (
-    <MainContainer className="bg-light position-relative">
+    <MainContainer data-testid='profile-page' className="bg-light position-relative">
       <BgTopImage src="https://source.unsplash.com/random"/>
       <Container>
         <div className="text-center py-5">

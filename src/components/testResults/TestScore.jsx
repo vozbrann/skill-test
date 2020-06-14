@@ -16,7 +16,7 @@ const TestImage = styled(Image)`
 
 const TestScore = () => {
   return (
-    <Container className="my-4">
+    <Container className="my-4" data-testid='result-page'>
       <Row className="mb-5">
         <Col className="">
           <div className="mb-4">

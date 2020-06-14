@@ -19,7 +19,7 @@ const AppBar = () => {
   return (
     <Navbar onToggle={() => setNavExpanded(!navExpanded)} expanded={navExpanded} bg="primary" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand className="font-weight-bold" as={Link} to="/">SkillTest</Navbar.Brand>
+        <Navbar.Brand className="font-weight-bold" data-testid="logo-home-link" as={Link} to="/">SkillTest</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" onClick={() => setNavExpanded(false)}>
           <Nav>
@@ -32,11 +32,11 @@ const AppBar = () => {
           </Nav>
           <Nav className="ml-auto">
             {userInfoLoading ?
-              <Spinner animation="border" />
+              <Spinner data-testid="loading-spinner" animation="border" />
               :
               <>
                 {user ?
-                  <Nav.Link as={NavLink} to="/profile" className="d-flex align-items-center m-0 p-0">
+                  <Nav.Link as={NavLink} to="/profile" data-testid="profile-link" className="d-flex align-items-center m-0 p-0">
                     <p className="h5 mb-0 mr-3">{user.username}</p>
                     <UserAvatar src="https://source.unsplash.com/random"/>
                   </Nav.Link>

@@ -20,7 +20,7 @@ const AllResults = () => {
     dispatch(fetchResults());
   }, []);
   return (
-    <Container className="my-3">
+    <Container className="my-3" data-testid='allResults-page'>
       <h1 className="mb-4 text-center">All results</h1>
       {resultListLoading && !!resultList.length &&
       <div className="text-center my-3"><Spinner animation="border"/></div>}
