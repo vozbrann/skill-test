@@ -69,7 +69,7 @@ const Main = () => {
           <h2 className="mt-3">Popular test</h2>
           {testInfoListLoading && !!testInfoList.length &&
           <div className="text-center mb-4">
-            <Spinner animation="border"/>
+            <Spinner data-testid="testInfoListSpinner" animation="border"/>
           </div>
           }
           {testInfoListError &&
