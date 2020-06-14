@@ -27,7 +27,7 @@ const StyledTestCardSmall = styled.div`
 
 const SmallTestCard = ({test}) => {
   return (
-    <StyledTestCardSmall className="rounded p-3">
+    <StyledTestCardSmall className="rounded p-3" data-testid={!test ? 'smallTestCardSkeleton' : 'smallTestCard'}>
       <div
         className="d-flex justify-content-between align-items-center mb-3">
         <p className="h4 mb-0 w-100">{(test && test.title) ||
