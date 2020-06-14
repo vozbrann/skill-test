@@ -47,6 +47,7 @@ const Catalog = () => {
           </InputGroup.Prepend>
           <FormControl
             className="border-secondary"
+            name = "search-catalog"
             placeholder="Test title..."
             value={searchInput}
             onChange={handleSearchInputChange}
@@ -55,7 +56,7 @@ const Catalog = () => {
 
         {testInfoListLoading && !!testInfoList.length &&
         <div className="text-center mb-4">
-          <Spinner animation="border"/>
+          <Spinner data-testid="spinner-test" animation="border"/>
         </div>
         }
         {testInfoListError &&
