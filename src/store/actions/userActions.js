@@ -1,4 +1,5 @@
 import api from '../../utils/api';
+import {transformApiErrors} from '../../utils/helpers'
 import {
   AUTH_USER,
   LOGIN_LOADING,
@@ -36,10 +37,10 @@ export const logoutUser = () => {
 export const getUserInfo = () => {
   return (dispatch, getState) => {
     dispatch(userInfoLoading(true));
-    api.get('/skillful/current_user/', {
+    api.get('/user/', {
       headers: {
         'Accept': 'application/json',
-        'Authorization': `JWT ${localStorage.getItem("access_token")}`
+        'Authorization': `Token ${localStorage.getItem("access_token")}`
       },
     })
 
@@ -60,7 +61,7 @@ export const loginUser = (user, history, setErrors) => {
     dispatch(loginLoading(true));
     api({
       method: 'post',
-      url: '/token-auth/',
+      url: '/auth/login/',
       data: user,
       headers: {
         'Accept': 'application/json'
@@ -68,7 +69,7 @@ export const loginUser = (user, history, setErrors) => {
     })
       .then((response) => {
         localStorage.setItem("access_token", response.data.token);
-        dispatch(authUser(response.data.user));
+        dispatch(getUserInfo());
         history.push('/');
       })
       .catch((error) => {
@@ -89,7 +90,7 @@ export const signUpUser = (user, history, setErrors) => {
     dispatch(signUpLoading(true));
     api({
       method: 'post',
-      url: '/skillful/users/',
+      url: '/auth/create-user/',
       data: user,
       headers: {
         'Accept': 'application/json'
@@ -112,12 +113,4 @@ export const signUpUser = (user, history, setErrors) => {
         console.log(getState());
       })
   }
-};
-
-const transformApiErrors = (data) => {
-  let res = {};
-  for (let [key, value] of Object.entries(data)) {
-    res[key] = value.reduce((res, errMessage) => res + " " + errMessage);
-  }
-  return res;
 };

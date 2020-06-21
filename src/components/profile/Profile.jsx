@@ -4,6 +4,7 @@ import AchievementsImage from '../../img/undraw_order_confirmed_aaw7.svg';
 
 import Container from 'react-bootstrap/Container';
 import Badge from 'react-bootstrap/Badge';
+import Button from 'react-bootstrap/Button';
 
 import UserAvatar from '../UserAvatar';
 
@@ -15,6 +16,9 @@ import Image from 'react-bootstrap/Image';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
 import {fetchUserResults} from '../../store/actions/testResultsActions';
+import {logoutUser} from '../../store/actions/userActions';
+
+import ImagePlaceholder from '../../img/img-placeholder.jpg'
 
 const MainContainer = styled.div`
   z-index: 10;
@@ -33,6 +37,16 @@ const StyledBadge = styled(Badge)`
   width: 70px;
 `;
 
+const UserAvatarContainer = styled.div`
+  display: inline-block;
+  position: relative;
+  span {
+    position: absolute;
+    bottom: 5px;
+    right: 0;
+  }
+`;
+
 const Profile = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.user);
@@ -48,8 +62,13 @@ const Profile = () => {
       <BgTopImage src="https://source.unsplash.com/random"/>
       <Container>
         <div className="text-center py-5">
-          <UserAvatar className="mb-3" src="https://source.unsplash.com/random"
-                      imageLarge/>
+          {!!user &&
+          <UserAvatarContainer>
+            <UserAvatar className="mb-3" src={user.image || ImagePlaceholder}
+                        imageLarge/>
+            <span className="material-icons text-white">create</span>
+          </UserAvatarContainer>
+          }
           {user ?
             <p className="h1 text-white">{user.username}</p>
             :
@@ -66,7 +85,7 @@ const Profile = () => {
           }
         </div>
       </Container>
-      <Container className="pb-5">
+      <Container className="pb-4">
         <div className="bg-white shadow">
           <h2 className="text-center py-4 border-bottom">Achievements</h2>
           <Row className="p-4 pt-5 pb-0">
@@ -100,11 +119,21 @@ const Profile = () => {
                   </div>
                 </div>
               ))}
-              <p className="text-right">
-                <Link to="/myResults">View more...</Link>
-              </p>
+              {!resultList.length ? <p className="text-center">No result yet</p> :
+                <p className="text-right">
+                  <Link to="/myResults">View more...</Link>
+                </p>
+              }
             </Col>
           </Row>
+        </div>
+      </Container>
+
+      <Container className="pb-5 ">
+        <div className="bg-white shadow d-flex p-3">
+          <Button variant="primary" className="d-flex mr-3"><span className="material-icons mr-2">email</span>Change email</Button>
+          <Button variant="primary" className="d-flex mr-auto"><span className="material-icons mr-2">vpn_key</span>Change password</Button>
+          <Button onClick={() => dispatch(logoutUser())} variant="secondary" className="d-flex"><span className="material-icons mr-2">exit_to_app</span>Logout</Button>
         </div>
       </Container>
     </MainContainer>

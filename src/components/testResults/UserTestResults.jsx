@@ -81,20 +81,21 @@ const UserTestResults = () => {
       <Alert variant="warning">
         resultListError
       </Alert>}
-      {!!resultList.length ?
+      {!!resultList.length &&
         <div>
           {resultList.map(result => (
             <TestScorePreview handleStatusModalShow={handleStatusModalShow}
                               key={result.id} result={result}/>
           ))}
-        </div> :
-        <>
-          <TestScorePreview handleStatusModalShow={handleStatusModalShow}/>
-          <TestScorePreview handleStatusModalShow={handleStatusModalShow}/>
-          <TestScorePreview handleStatusModalShow={handleStatusModalShow}/>
-          <TestScorePreview handleStatusModalShow={handleStatusModalShow}/>
-        </>
-      }
+        </div>}
+      {!resultList.length && resultListLoading &&
+      <>
+        <TestScorePreview handleStatusModalShow={handleStatusModalShow}/>
+        <TestScorePreview handleStatusModalShow={handleStatusModalShow}/>
+        <TestScorePreview handleStatusModalShow={handleStatusModalShow}/>
+        <TestScorePreview handleStatusModalShow={handleStatusModalShow}/>
+      </>}
+      {!resultList.length && !resultListLoading && <p className="text-center">No result yet</p>}
     </Container>
   );
 };

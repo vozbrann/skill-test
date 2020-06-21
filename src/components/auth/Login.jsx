@@ -13,9 +13,10 @@ import {useHistory} from 'react-router-dom';
 import AuthContainer from './AuthContainer';
 
 const validationSchema = Yup.object().shape({
-  email: Yup
+  username: Yup
     .string()
-    .email('Invalid email')
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
     .required('Required'),
   password: Yup
     .string()
@@ -26,7 +27,7 @@ const validationSchema = Yup.object().shape({
 const Login = () => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.user);
-  const loginLoading = useSelector(state => state.user.signUpLoading);
+  const loginLoading = useSelector(state => state.user.loginLoading);
   let history = useHistory();
 
   return (
@@ -35,12 +36,11 @@ const Login = () => {
       <p className="text-secondary mb-4">Welcome back, please login to your account.</p>
       <Formik
         initialValues={{
-          email: 'roman@gmail.com',
+          username: 'Roman',
           password: '12345678',
         }}
         validationSchema={validationSchema}
         onSubmit={(values, {setErrors}) => {
-          // same shape as initial values
           dispatch(loginUser(values, history, setErrors));
         }}
       >
@@ -54,18 +54,20 @@ const Login = () => {
           errors,
         }) => (
           <Form noValidate onSubmit={handleSubmit}>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email</Form.Label>
+            <Form.Group>
+              <Form.Label>Username</Form.Label>
               <Form.Control
-                type="email"
-                placeholder="Enter email..."
-                name="email"
-                value={values.email}
+                type="text"
+                placeholder="Enter username..."
+                name="username"
+                value={values.username}
                 onChange={handleChange}
-                isValid={touched.email && !errors.email}
-                isInvalid={touched.email && !!errors.email}
+                isValid={touched.username && !errors.username}
+                isInvalid={touched.username && !!errors.username}
               />
-              <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                {errors.username}
+              </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>

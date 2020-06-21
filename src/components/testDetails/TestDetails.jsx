@@ -61,7 +61,7 @@ const TestDetails = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchTestInfo(id));
+    dispatch(fetchTestInfo(id, history));
   }, []);
 
   return (
@@ -79,11 +79,11 @@ const TestDetails = () => {
             <div>
               <div className="d-flex">
                 <span className="mr-2">Test duration:</span>
-                <Time className="font-weight-bold" time={testInfo.duration} clear/>
+                <Time className="font-weight-bold" time={testInfo.time_interval_ms} clear/>
               </div>
               <div className="d-flex">
                 <span className="mr-1">You can retake test in</span>
-                <Time className="font-weight-bold" time={testInfo.timeBetweenAttempts} clear/>
+                <Time className="font-weight-bold" time={testInfo.time_between_attempts_ms} clear/>
               </div>
             </div>
           }
@@ -147,8 +147,8 @@ const TestDetails = () => {
               <div className="d-flex">
                 {testInfo && !testInfoLoading ?
                   <>
-                    <Time time={testInfo.duration } duration className="mr-3"/>
-                    <Time time={testInfo.timeBetweenAttempts}/>
+                    <Time time={testInfo.time_interval_ms } duration className="mr-3"/>
+                    <Time time={testInfo.time_between_attempts_ms}/>
                   </> :
                   <span>
            <span className="mr-3">
@@ -163,7 +163,7 @@ const TestDetails = () => {
             </div>
           </Col>
           <Col className="px-0">
-            {testInfo && !testInfoLoading ? <TestImage src={testInfo.img}/> :
+            {testInfo && !testInfoLoading ? <TestImage src={testInfo.image}/> :
               <div style={{lineHeight: '1'}}>
                 <Skeleton height={400}/>
               </div>

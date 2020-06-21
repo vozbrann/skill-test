@@ -25,7 +25,7 @@ const TestCard = ({testInfo}) => {
   return (
     <StyledTestCard>
       {testInfo ? <TestImage
-        src={testInfo.img}/> : <div style={{lineHeight: '1'}}><Skeleton
+        src={testInfo.image}/> : <div style={{lineHeight: '1'}}><Skeleton
         height={200}/></div>}
       <div className="p-3">
         <p className="h2">{testInfo ? testInfo.title : <Skeleton width={150}/>}</p>
@@ -34,8 +34,8 @@ const TestCard = ({testInfo}) => {
         <div className="d-flex align-items-center justify-content-end">
           {testInfo ?
             <>
-              <Time time={testInfo.duration} className="mr-3"/>
-              <Time time={testInfo.timeBetweenAttempts} duration/>
+              <Time time={testInfo.time_interval_ms} className="mr-3"/>
+              <Time time={testInfo.time_between_attempts_ms} duration/>
             </> :
             <span>
            <span className="mr-3">

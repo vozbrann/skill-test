@@ -38,8 +38,8 @@ const SmallTestCard = ({test}) => {
       <div className="d-flex align-items-center justify-content-end">
         {test ?
           <>
-            <Time time={test.duration} className="mr-3"/>
-            < Time time={test.timeBetweenAttempts} duration/>
+            <Time time={test.time_interval_ms} className="mr-3"/>
+            < Time time={test.time_between_attempts_ms} duration/>
           </> :
          <span>
            <span className="mr-3">

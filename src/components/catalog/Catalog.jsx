@@ -64,7 +64,7 @@ const Catalog = () => {
           {testInfoListError}
         </Alert>
         }
-        {testInfoList.length ?
+        {!!testInfoList.length &&
           <Row className="mb-4">
             {filteredTestList.map(testInfo => (
               <Col as={StyledLink} to={'/catalog/' + testInfo.id}
@@ -72,27 +72,29 @@ const Catalog = () => {
                 <TestCard testInfo={testInfo}/>
               </Col>
             ))}
-          </Row> :
-          <Row>
-            <Col md={6} lg={4} className="mb-4">
-              <TestCard />
-            </Col>
-            <Col md={6} lg={4} className="mb-4">
-              <TestCard />
-            </Col>
-            <Col md={6} lg={4} className="mb-4">
-              <TestCard />
-            </Col>
-            <Col md={6} lg={4} className="mb-4">
-              <TestCard />
-            </Col>
-            <Col md={6} lg={4} className="mb-4">
-              <TestCard />
-            </Col>
-            <Col md={6} lg={4} className="mb-4">
-              <TestCard />
-            </Col>
           </Row>}
+
+        {!testInfoList.length && testInfoListLoading &&
+        <Row>
+          <Col md={6} lg={4} className="mb-4">
+            <TestCard />
+          </Col>
+          <Col md={6} lg={4} className="mb-4">
+            <TestCard />
+          </Col>
+          <Col md={6} lg={4} className="mb-4">
+            <TestCard />
+          </Col>
+          <Col md={6} lg={4} className="mb-4">
+            <TestCard />
+          </Col>
+          <Col md={6} lg={4} className="mb-4">
+            <TestCard />
+          </Col>
+          <Col md={6} lg={4} className="mb-4">
+            <TestCard />
+          </Col>
+        </Row>}
       </Container>
     </div>
   );

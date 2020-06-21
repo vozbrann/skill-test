@@ -9,6 +9,7 @@ import {
   USER_RESULT_LIST_LOADING,
   USER_RESULT_LIST_ERROR
 } from '../actions/actionsTypes';
+import {logoutUser} from './userActions';
 
 const userResults = [
   {
@@ -136,11 +137,33 @@ export const fetchResults = () => {
 
 export const fetchUserResults = () => {
   return (dispatch, getState) => {
+    // dispatch(testUserResultListLoading(true));
+    // setTimeout(() => {
+    //   dispatch(updateUserResultList(userResults));
+    //   dispatch(testUserResultListLoading(false));
+    // }, 2000);
+
     dispatch(testUserResultListLoading(true));
-    setTimeout(() => {
-      dispatch(updateUserResultList(userResults));
-      dispatch(testUserResultListLoading(false));
-    }, 2000)
+    api.get('/user/taken-tests/', {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Token ${localStorage.getItem("access_token")}`
+      },
+    })
+      .then((response) => {
+        dispatch(updateUserResultList(response.data));
+      })
+      .catch((error) => {
+        if (error.response) {
+          dispatch(testUserResultListError(error.response.data || []));
+        } else {
+          dispatch(testUserResultListError('Something went wrong. Please try again'));
+        }
+
+      })
+      .finally(() => {
+        dispatch(testUserResultListLoading(false));
+      })
   }
 };
 

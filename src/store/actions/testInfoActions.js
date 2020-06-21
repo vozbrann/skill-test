@@ -8,6 +8,8 @@ import {
   TEST_INFO_SET
 } from '../actions/actionsTypes';
 
+import {transformApiErrors} from '../../utils/helpers'
+
 const testList = [
   {
     id: 1,
@@ -92,54 +94,50 @@ const testInfoError = error => ({
 
 export const fetchTestInfoList = () => {
   return (dispatch, getState) => {
-    // dispatch(testInfoListLoading(true));
-    // api.get('/', {
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Authorization': `JWT ${localStorage.getItem("access_token")}`
-    //   },
-    // })
-    //   .then((response) => {
-    //     dispatch(setTestInfoList(response.data));
-    //   })
-    //   .catch((error) => {
-    //     dispatch(testInfoListError(error.response.data));
-    //   })
-    //   .finally(() => {
-    //     dispatch(testInfoListLoading(false));
-    //   })
-
     dispatch(testInfoListLoading(true));
-    setTimeout(() => {
-      dispatch(setTestInfoList(testList));
-      dispatch(testInfoListLoading(false));
-    }, 2000)
+    api.get('/tests/', {
+      headers: {
+        'Accept': 'application/json',
+      },
+    })
+      .then((response) => {
+        dispatch(setTestInfoList(response.data));
+      })
+      .catch((error) => {
+        if(error.response) {
+          testInfoListError(transformApiErrors(error.response.data));
+        } else {
+          testInfoListError({form: "Something went wrong. Please try again"});
+        }
+      })
+      .finally(() => {
+        dispatch(testInfoListLoading(false));
+      })
+
+    // dispatch(testInfoListLoading(true));
+    // setTimeout(() => {
+    //   dispatch(setTestInfoList(testList));
+    //   dispatch(testInfoListLoading(false));
+    // }, 2000)
   }
 };
 
-export const fetchTestInfo = (id) => {
+export const fetchTestInfo = (id, history) => {
   return (dispatch, getState) => {
-    // dispatch(testInfoListLoading(true));
-    // api.get(`/${id}`, {
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Authorization': `JWT ${localStorage.getItem("access_token")}`
-    //   },
-    // })
-    //   .then((response) => {
-    //     dispatch(setTestInfoList(response.data));
-    //   })
-    //   .catch((error) => {
-    //     dispatch(testInfoListError(error.response.data));
-    //   })
-    //   .finally(() => {
-    //     dispatch(testInfoListLoading(false));
-    //   })
-
     dispatch(testInfoLoading(true));
-    setTimeout(() => {
-      dispatch(setTestInfo(testInfo));
-      dispatch(testInfoLoading(false));
-    }, 2000)
+    api.get(`/tests/${id}/`, {
+      headers: {
+        'Accept': 'application/json',
+      },
+    })
+      .then((response) => {
+        dispatch(setTestInfo(response.data));
+      })
+      .catch((error) => {
+        history.push('/');
+      })
+      .finally(() => {
+        dispatch(testInfoLoading(false));
+      })
   }
 };

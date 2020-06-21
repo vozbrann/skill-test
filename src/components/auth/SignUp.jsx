@@ -69,10 +69,10 @@ const SignUp = () => {
         }) => (
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group>
-              <Form.Label>Name</Form.Label>
+              <Form.Label>Username</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter your name..."
+                placeholder="Enter username..."
                 name="username"
                 value={values.username}
                 onChange={handleChange}

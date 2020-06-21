@@ -14,3 +14,11 @@ export function convertMS( milliseconds ) {
     seconds
   };
 }
+
+export const transformApiErrors = (data) => {
+  let res = {};
+  for (let [key, value] of Object.entries(data)) {
+    res[key] = value.reduce((res, errMessage) => res + " " + errMessage);
+  }
+  return res;
+};
