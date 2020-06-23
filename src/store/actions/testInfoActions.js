@@ -134,7 +134,7 @@ export const fetchTestInfo = (id, history) => {
         dispatch(setTestInfo(response.data));
       })
       .catch((error) => {
-        history.push('/');
+        testInfoError('Something went wrong. Please try again');
       })
       .finally(() => {
         dispatch(testInfoLoading(false));

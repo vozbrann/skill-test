@@ -22,7 +22,7 @@ const Question = ({question, index}) => {
     if (selectedAnswers && !!selectedAnswers[id] && selectedAnswers[id].includes(answerId)) {
       newAnswer = selectedAnswers[id].filter(el => el !== answerId);
     } else {
-      if (type === "radio" || !selectedAnswers[id]) {
+      if (type === "single_choice" || !selectedAnswers[id]) {
         newAnswer = [answerId];
       } else {
         newAnswer = [...selectedAnswers[id], answerId];
@@ -34,15 +34,17 @@ const Question = ({question, index}) => {
   return (
     <div className="p-5">
       <p className=""><span className="mr-2">{index + 1}.</span>{question.text}</p>
+      { !!question.code && !!question.progLang &&
       <pre>
         <code className={"language-"+question.progLang}>{question.code}</code>
       </pre>
+      }
       <ul className="list-group">
         {question.answers.map(answer => (
           <label key={answer.id} className="list-group-item m-0">
             <Form.Check
               custom
-              type={question.type}
+              type={question.type === "single_choice" ? "radio" : 'checkbox'}
               id={answer.id}
               onChange={() => handleInput(answer.id)}
               checked={!!selectedAnswers && !!selectedAnswers[question.id] && !!selectedAnswers[question.id].includes(answer.id)}

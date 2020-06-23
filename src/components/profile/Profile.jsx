@@ -19,6 +19,7 @@ import {fetchUserResults} from '../../store/actions/testResultsActions';
 import {logoutUser} from '../../store/actions/userActions';
 
 import ImagePlaceholder from '../../img/img-placeholder.jpg'
+import Skeleton from 'react-loading-skeleton';
 
 const MainContainer = styled.div`
   z-index: 10;
@@ -101,12 +102,16 @@ const Profile = () => {
               {resultList.map(result => (
                 <div key={result.id} className="shadow d-flex justify-content-between align-items-center p-3 mb-3">
                   <div className="d-flex">
-                    <p className="h4 mb-0 mr-3">{result.title}</p>
+                    <p className="h4 mb-0 mr-3">{result.test.title}</p>
                   </div>
                   <div className="d-flex align-items-center">
-                    <p className="mb-0 mr-3 text-secondary">{result.date}</p>
-                    <p className="h4 mb-0">{result.score}%</p>
-                    {result.public ?
+                    <p className="mb-0 mr-3 text-secondary">{new Date(parseInt(result.created_at)).toLocaleDateString()}</p>
+                    {result ? <p className="mb-0 h3">
+                      { !result.canceled ? result.result+"%" :
+                        "Canceled"
+                      }
+                    </p> : <Skeleton width={180}/>}
+                    {!result.canceled && <>{result.public ?
                       <StyledBadge className="align-self-center ml-2" pill
                                    variant="success">
                         published
@@ -116,6 +121,7 @@ const Profile = () => {
                         private
                       </StyledBadge>
                     }
+                    </>}
                   </div>
                 </div>
               ))}

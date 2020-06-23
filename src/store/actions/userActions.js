@@ -5,7 +5,45 @@ import {
   LOGIN_LOADING,
   SIGN_UP_LOADING,
   USER_INFO_LOADING,
+  USER_LIST_SET,
+  USER_LIST_LOADING,
+  USER_LIST_ERROR,
+  UPDATE_PUBLIC_PROFILE,
+  PUBLIC_PROFILE_LOADING,
+  PUBLIC_PROFILE_ERROR,
 } from '../actions/actionsTypes';
+import {fetchResult, fetchUserResults} from './testResultsActions';
+
+
+const updatePublicProfile = profile => ({
+  type: UPDATE_PUBLIC_PROFILE,
+  payload: profile
+});
+
+const publicProfileLoading = bool => ({
+  type: PUBLIC_PROFILE_LOADING,
+  payload: bool
+});
+
+const  publicProfileError = error => ({
+  type: PUBLIC_PROFILE_ERROR,
+  payload: error
+});
+
+const updateUserList = userList => ({
+  type: USER_LIST_SET,
+  payload: userList
+});
+
+const userListLoading = bool => ({
+  type: USER_LIST_LOADING,
+  payload: bool
+});
+
+const userListError = error => ({
+  type: USER_LIST_ERROR,
+  payload: error
+});
 
 const authUser = user => ({
   type: AUTH_USER,
@@ -31,6 +69,66 @@ export const logoutUser = () => {
   return (dispatch, getState) => {
     localStorage.setItem("access_token", '');
     dispatch(authUser(null));
+  }
+};
+
+export const fetchPublicProfile = (id) => {
+  return (dispatch, getState) => {
+    dispatch(publicProfileLoading(true));
+    api({
+      method: 'get',
+      url: '/users/'+id+'/',
+      params: {
+        user_id: id,
+      },
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Token ${localStorage.getItem("access_token")}`,
+      },
+    })
+      .then((response) => {
+        api({
+          method: 'get',
+          url: '/users/taken-tests/',
+          params: {
+            user_id: id,
+          },
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': `Token ${localStorage.getItem("access_token")}`,
+          },
+        })
+          .then((response2) => {
+            dispatch(updatePublicProfile({...response.data, resultList: response2.data}));
+          })
+      })
+      .catch((error) => {
+        dispatch(publicProfileError('Something went wrong. Please try again'));
+      })
+      .finally(() => {
+        dispatch(publicProfileLoading(false));
+      })
+  }
+};
+
+export const fetchUserList = (searchQuery) => {
+  return (dispatch, getState) => {
+    dispatch(userListLoading(true));
+    api.get(`/users/${searchQuery ? "?search="+searchQuery : ""}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Token ${localStorage.getItem("access_token")}`
+      },
+    })
+      .then((response) => {
+        dispatch(updateUserList(response.data));
+      })
+      .catch((error) => {
+        userListError("Something went wrong. Please try again");
+      })
+      .finally(() => {
+        dispatch(userListLoading(false));
+      })
   }
 };
 

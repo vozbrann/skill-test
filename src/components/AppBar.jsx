@@ -8,6 +8,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import {Link, NavLink} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import UserAvatar from './UserAvatar';
+
+import ImagePlaceholder from '../img/img-placeholder.jpg'
 const AppBar = () => {
 
   const [navExpanded, setNavExpanded] = useState(false);
@@ -28,6 +30,7 @@ const AppBar = () => {
             {user && <>
               <Nav.Link exact as={NavLink} to="/myResults">My results</Nav.Link>
               <Nav.Link exact as={NavLink} to="/allResults">All results</Nav.Link>
+              <Nav.Link exact as={NavLink} to="/users">All Users</Nav.Link>
             </>}
           </Nav>
           <Nav className="ml-auto">
@@ -38,7 +41,7 @@ const AppBar = () => {
                 {user ?
                   <Nav.Link as={NavLink} to="/profile" data-testid="profile-link" className="d-flex align-items-center m-0 p-0">
                     <p className="h5 mb-0 mr-3">{user.username}</p>
-                    <UserAvatar src="https://source.unsplash.com/random"/>
+                    <UserAvatar src={user.image || ImagePlaceholder}/>
                   </Nav.Link>
                   :
                   <>

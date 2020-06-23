@@ -16,7 +16,7 @@ const TestControlBar = () => {
   const testCancelError = useSelector(state => state.test.testCancelError);
 
   const [showCancelModal, setCancelModalShow] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(test.duration);
+  const [timeLeft, setTimeLeft] = useState(test.time_interval_ms);
 
   let history = useHistory();
 
@@ -62,7 +62,7 @@ const TestControlBar = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <p className="h4 mb-0">Vue.js</p>
+      <p className="h4 mb-0">{test.title}</p>
       <div className="d-flex align-items-center">
         {testSubmitLoading || testCancelLoading ? <Spinner size="sm" animation="border" className="mr-4" /> :
           <div className="d-flex align-items-center mr-4">

@@ -39,8 +39,8 @@ const UserTestResults = () => {
     dispatch(fetchUserResults());
   }, []);
 
-  const handleSubmit = (newStatus) => {
-    dispatch(changePublicStatus(newStatus, handleStatusModalClose));
+  const handleSubmit = () => {
+    dispatch(changePublicStatus(activeTestRes.id, handleStatusModalClose));
   };
 
   return (
@@ -53,8 +53,8 @@ const UserTestResults = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="d-flex justify-content-between align-items-center">
-            <p className="h3 mb-0">{activeTestRes.title}</p>
-            <p className="h3 mb-0">{activeTestRes.score}%</p>
+            <p className="h3 mb-0">{activeTestRes.test.title}</p>
+            <p className="h3 mb-0">{activeTestRes.result}%</p>
           </div>
           {resultStatusError &&
           <Alert className="mt-3" variant="danger">

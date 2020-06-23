@@ -7,7 +7,10 @@ import {
   RESULT_STATUS_ERROR,
   UPDATE_USER_RESULT_LIST,
   USER_RESULT_LIST_LOADING,
-  USER_RESULT_LIST_ERROR
+  USER_RESULT_LIST_ERROR,
+  UPDATE_RESULT,
+  RESULT_LOADING,
+  RESULT_ERROR,
 } from '../actions/actionsTypes';
 import {logoutUser} from './userActions';
 
@@ -85,6 +88,21 @@ const results = [
   }
 ];
 
+const updateResult = result => ({
+  type: UPDATE_RESULT,
+  payload: result
+});
+
+const resultLoading = bool => ({
+  type: RESULT_LOADING,
+  payload: bool
+});
+
+const resultError = error => ({
+  type: RESULT_ERROR,
+  payload: error
+});
+
 const updateUserResultList = resultList => ({
   type: UPDATE_USER_RESULT_LIST,
   payload: resultList
@@ -128,21 +146,26 @@ const testStatusError = error => ({
 export const fetchResults = () => {
   return (dispatch, getState) => {
     dispatch(testResultListLoading(true));
-    setTimeout(() => {
-      dispatch(updateResultList(results));
-      dispatch(testResultListLoading(false));
-    }, 2000)
+    api.get('/all-taken-tests-date/', {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Token ${localStorage.getItem("access_token")}`
+      },
+    })
+      .then((response) => {
+        dispatch(updateResultList(response.data));
+      })
+      .catch((error) => {
+        dispatch(testUserResultListError('Something went wrong. Please try again'));
+      })
+      .finally(() => {
+        dispatch(testResultListLoading(false));
+      })
   }
 };
 
 export const fetchUserResults = () => {
   return (dispatch, getState) => {
-    // dispatch(testUserResultListLoading(true));
-    // setTimeout(() => {
-    //   dispatch(updateUserResultList(userResults));
-    //   dispatch(testUserResultListLoading(false));
-    // }, 2000);
-
     dispatch(testUserResultListLoading(true));
     api.get('/user/taken-tests/', {
       headers: {
@@ -154,12 +177,7 @@ export const fetchUserResults = () => {
         dispatch(updateUserResultList(response.data));
       })
       .catch((error) => {
-        if (error.response) {
-          dispatch(testUserResultListError(error.response.data || []));
-        } else {
-          dispatch(testUserResultListError('Something went wrong. Please try again'));
-        }
-
+        dispatch(testUserResultListError('Something went wrong. Please try again'));
       })
       .finally(() => {
         dispatch(testUserResultListLoading(false));
@@ -167,13 +185,54 @@ export const fetchUserResults = () => {
   }
 };
 
-export const changePublicStatus = (newStatus, handleStatusModalClose) => {
+export const fetchResult = (id) => {
+  return (dispatch, getState) => {
+    dispatch(resultLoading(true));
+    api.get('/taken-test/', {
+      params: {
+        test_taken_id: id,
+      },
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Token ${localStorage.getItem("access_token")}`
+      },
+    })
+      .then((response) => {
+        dispatch(updateResult(response.data));
+      })
+      .catch((error) => {
+        dispatch(resultError('Something went wrong. Please try again'));
+      })
+      .finally(() => {
+        dispatch(resultLoading(false));
+      })
+  }
+};
+
+export const changePublicStatus = (id, handleStatusModalClose) => {
   return (dispatch, getState) => {
     dispatch(testStatusLoading(true));
-    setTimeout(() => {
-      dispatch(updateUserResultList(userResults));
-      dispatch(testStatusLoading(false));
-      handleStatusModalClose();
-    }, 2000)
+    api({
+      method: 'patch',
+      url: '/taken-test/update/',
+      params: {
+      test_taken_id: id,
+      },
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Token ${localStorage.getItem("access_token")}`,
+      },
+    })
+      .then(() => {
+        dispatch(fetchUserResults());
+        dispatch(fetchResult(id));
+        handleStatusModalClose();
+      })
+      .catch((error) => {
+        dispatch(resultError('Something went wrong. Please try again'));
+      })
+      .finally(() => {
+        dispatch(testStatusLoading(false));
+      })
   }
 };

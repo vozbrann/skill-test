@@ -142,10 +142,13 @@ const testStartError = error => ({
   payload: error
 });
 
-export const setSelectedAnswers = answers => ({
-  type: SET_SELECTED_ANSWERS,
-  payload: answers
-});
+export const setSelectedAnswers = answers => {
+  console.log(answers);
+  return {
+    type: SET_SELECTED_ANSWERS,
+    payload: answers
+  };
+};
 
 const testSubmitLoading = bool => ({
   type: TEST_SUBMIT_LOADING,
@@ -167,40 +170,85 @@ const testCancelError = error => ({
   payload: error
 });
 
-export const startTest = (id, history) => {
+export const startTest = (test_id, history) => {
   return (dispatch, getState) => {
-
     dispatch(testStartLoading(true));
-    setTimeout(() => {
-      dispatch(testSet(testData));
-      dispatch(testStartLoading(false));
-      history.push('/test')
-    }, 2000)
+    api({
+      method: 'post',
+      url: `/start-test/?test_id=${test_id}`,
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Token ${localStorage.getItem("access_token")}`
+      },
+    })
+      .then((response1) => {
+        api.get(`/full-test/?id=${response1.data.id}`, {
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': `Token ${localStorage.getItem("access_token")}`
+          },
+        })
+          .then((response) => {
+            dispatch(testSet({...response.data, created_at: response1.data.created_at, test_taken_id: response1.data.id}));
+            console.log(getState().test.test);
+            history.push('/test');
+          })
+          .catch((error) => {
+            testStartError('Something went wrong. Please try again');
+          })
+          .finally(() => {
+            dispatch(testStartLoading(false));
+          })
+      })
+      .catch((error) => {
+        testStartError('Something went wrong. Please try again');
+      })
+      .finally(() => {
+        dispatch(testStartLoading(false));
+      })
   }
 };
 
 export const submitTest = (history) => {
   return (dispatch, getState) => {
-
     dispatch(testSubmitLoading(true));
-    setTimeout(() => {
-      history.push('/');
-      console.log(getState().test.selectedAnswers);
-      dispatch(testSet(null));
-      dispatch(setSelectedAnswers({}));
-      dispatch(testSubmitLoading(false));
-    }, 2000)
+    let ansArr = Object.keys(getState().test.selectedAnswers).reduce(function(res, v) {
+      return res.concat(getState().test.selectedAnswers[v]);
+    }, []);
+    ansArr = ansArr.join(" ");
+    api({
+      method: 'post',
+      url: `/submit-test/`,
+      params: {
+        test_taken_id: getState().test.test.test_taken_id,
+        answers: ansArr
+      },
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Token ${localStorage.getItem("access_token")}`
+      },
+    })
+      .then((response) => {
+        history.push(`/result/${getState().test.test.test_taken_id}`);
+        dispatch(testSet(null));
+        dispatch(setSelectedAnswers({}));
+        dispatch(testCancelLoading(false));
+      })
+      .catch((error) => {
+        testSubmitError('Something went wrong. Please try again');
+      })
+      .finally(() => {
+        dispatch(testSubmitLoading(false));
+      })
   }
 };
 
 export const cancelTest = (history) => {
   return (dispatch, getState) => {
     dispatch(testCancelLoading(true));
-    setTimeout(() => {
-      history.push('/');
-      dispatch(testSet(null));
-      dispatch(setSelectedAnswers({}));
-      dispatch(testCancelLoading(false));
-    }, 2000)
+    history.push(`/result/${getState().test.test.test_taken_id}`);
+    dispatch(testSet(null));
+    dispatch(setSelectedAnswers({}));
+    dispatch(testCancelLoading(false));
   }
 };

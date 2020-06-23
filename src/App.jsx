@@ -19,6 +19,11 @@ import Test from './components/test/Test';
 import UserTestResults from './components/testResults/UserTestResults';
 import AllResults from './components/testResults/AllResults';
 import TestScore from './components/testResults/TestScore';
+import AllUsers from './components/allUsers/AllUsers';
+import {
+  BrowserRouter as Router,
+} from 'react-router-dom';
+import PublicProfile from './components/profile/PublicProfile';
 
 function App() {
   const dispatch = useDispatch();
@@ -40,6 +45,8 @@ function App() {
         {(user || userInfoLoading) && <Route exact path="/myResults" component={UserTestResults}/>}
         {(user || userInfoLoading) && <Route exact path="/allResults" component={AllResults}/>}
         {(user || userInfoLoading) && <Route exact path="/result/:id" component={TestScore}/>}
+        {(user || userInfoLoading) && <Route exact path="/publicProfile/:id" component={PublicProfile}/>}
+        {(user || userInfoLoading) && <Route exact path="/users/" component={AllUsers}/>}
         {user && test && <Route exact path="/test" component={Test}/>}
         {(!user || userInfoLoading) && <Route exact path="/login" component={Login}/>}
         {(!user || userInfoLoading) && <Route exact path="/signUp" component={SignUp}/>}

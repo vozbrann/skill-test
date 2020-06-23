@@ -159,7 +159,7 @@ const Test = () => {
                         </QuestionList>}
                     </Col>
                     <Col>
-                        {test && <Question question={test.questions[activeQuestion]}
+                        {test && !!test.questions.length && <Question question={test.questions[activeQuestion]}
                                            index={activeQuestion}/>}
                     </Col>
                 </Row>

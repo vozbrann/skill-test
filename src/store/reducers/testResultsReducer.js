@@ -6,10 +6,16 @@ import {
   RESULT_STATUS_ERROR,
   UPDATE_USER_RESULT_LIST,
   USER_RESULT_LIST_LOADING,
-  USER_RESULT_LIST_ERROR
+  USER_RESULT_LIST_ERROR,
+  UPDATE_RESULT,
+  RESULT_LOADING,
+  RESULT_ERROR,
 } from '../actions/actionsTypes';
 
 const initialState = {
+  result: null,
+  resultLoading: false,
+  resultError: '',
   resultList: [],
   resultListLoading: false,
   resultListError: '',
@@ -21,6 +27,12 @@ const initialState = {
 };
 export default (state = initialState, action) => {
   switch (action.type) {
+    case UPDATE_RESULT:
+      return {...state, result: action.payload};
+    case RESULT_LOADING:
+      return {...state, resultLoading: action.payload};
+    case RESULT_ERROR:
+      return {...state, resultError: action.payload};
     case UPDATE_RESULT_LIST:
       return {...state, resultList: action.payload};
     case RESULT_LIST_LOADING:
